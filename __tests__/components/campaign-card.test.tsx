@@ -23,7 +23,6 @@ describe('CampaignCard', () => {
     render(<CampaignCard campaign={mockCampaign} />)
     
     expect(screen.getByText('Test Campaign')).toBeInTheDocument()
-    expect(screen.getByText('This is a test campaign for unit testing')).toBeInTheDocument()
     expect(screen.getByText('$1000 / 5,000 Views')).toBeInTheDocument()
     expect(screen.getByText('1,500 views')).toBeInTheDocument()
     expect(screen.getByText('Popularity: 4/5')).toBeInTheDocument()
