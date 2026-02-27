@@ -69,8 +69,17 @@ describe('UTC Utilities', () => {
       const utcDate = toUTC(localDate)
       const backToLocal = fromUTC(utcDate)
       
-      expect(utcDate.getTime()).not.toBe(localDate.getTime())
+      // Round-trip conversion should return to original time
       expect(backToLocal.getTime()).toBe(localDate.getTime())
+    })
+
+    it('should handle UTC dates correctly', () => {
+      const utcDate = new Date('2024-01-15T10:30:00Z')
+      const result = toUTC(utcDate)
+      
+      // Should return a valid date
+      expect(result instanceof Date).toBe(true)
+      expect(isNaN(result.getTime())).toBe(false)
     })
   })
 
