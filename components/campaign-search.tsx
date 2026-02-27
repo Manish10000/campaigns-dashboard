@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Input } from '@/components/ui/input';
-import { Search, X } from 'lucide-react';
+import { X } from 'lucide-react';
 
 interface CampaignSearchProps {
   value: string;
@@ -56,20 +56,19 @@ export function CampaignSearch({ value, onChange, debounceMs = 1000 }: CampaignS
       <label htmlFor="campaign-search" className="sr-only">
         Search campaigns
       </label>
-      <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4 pointer-events-none" />
       <Input
         id="campaign-search"
         name="search"
         type="text"
-        placeholder="Search Campaigns..."
+        placeholder="Search Campaigns......"
         value={localValue}
         onChange={handleChange}
-        className="pl-11 pr-10 h-10 bg-muted border border-border rounded text-sm text-foreground placeholder:text-muted-foreground focus:border-primary focus:ring-0"
+        className="h-10 rounded-md border border-[var(--dashboard-input-border,#2f3135)] bg-[var(--dashboard-input-bg)] px-4 pr-10 text-sm text-[var(--dashboard-text,#e9e9e9)] placeholder:text-[var(--dashboard-text-muted,#5f6670)] focus:border-[#931010] focus:ring-0 transition-colors"
       />
       {localValue && (
         <button
           onClick={handleClear}
-          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+          className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[var(--dashboard-icon-color,#8f8f8f)] hover:text-[var(--dashboard-text,#f0f0f0)] transition-colors"
           aria-label="Clear search"
           type="button"
         >

@@ -8,9 +8,9 @@ import { useCampaigns } from '@/hooks/use-campaigns';
 import { useAuth } from '@/hooks/use-auth';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
-import { LogOut, User, Settings } from 'lucide-react';
-import { SeedrailLogo } from '@/components/seedrail-logo';
-import { ThemeToggle } from '@/components/theme-toggle';
+import { LogOut, User, Settings, Sun, Moon } from 'lucide-react';
+import { BrandLogo } from '@/components/brand-logo';
+import { useDashboardTheme } from './layout';
 
 function CampaignPageContent() {
   const [query, setQuery] = useState('');
@@ -21,7 +21,8 @@ function CampaignPageContent() {
   const [dateFilter, setDateFilter] = useState('all');
   const [popularityFilter, setPopularityFilter] = useState('all');
   const [budgetFilter, setBudgetFilter] = useState('all');
-  const { user, signOut, isLoading: authLoading } = useAuth();
+  const { user, signOut } = useAuth();
+  const { isDarkMode, toggleTheme } = useDashboardTheme();
 
   const { campaigns, total, isLoading } = useCampaigns({
     query,
@@ -37,158 +38,174 @@ function CampaignPageContent() {
   const totalPages = Math.ceil(total / pageSize);
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="sticky top-0 z-40 backdrop-blur-md bg-background/70 border-b border-border/40">
-        <div className="max-w-full mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <img 
-                src="/FORKOFF.png" 
-                alt="FORKOFF" 
-                className="h-12 w-auto"
-              />
-            </div>
-            <nav className="hidden md:flex gap-4 sm:gap-8 text-sm items-center">
-              <a href="#" className="text-primary-foreground font-medium bg-primary px-3 sm:px-4 py-2 rounded hover:bg-primary/90 transition-colors">
-                Campaigns
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                Performance
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                Earnings
-              </a>
-              <a href="#" className="text-muted-foreground hover:text-foreground transition-colors">
-                Accounts
-              </a>
-            </nav>
-            {/* Mobile menu button could go here */}
-            <div className="md:hidden">
-              <button className="w-8 h-8 rounded-lg glass-hover flex items-center justify-center">
-                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-                  <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center">
-                    {user?.avatar ? (
-                      <img src={user.avatar} alt="" className="w-8 h-8 rounded-full" />
-                    ) : (
-                      <span className="text-xs text-primary-foreground font-bold">
-                        {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-sm text-foreground">
-                    {user?.name || user?.email?.split('@')[0] || 'User'}
-                  </span>
+    <main className="min-h-screen bg-[var(--dashboard-bg)] text-[var(--dashboard-text)] transition-colors duration-300">
+      <div className="max-w-[1240px] mx-auto px-4 sm:px-6 py-5 sm:py-7">
+        {/* Header */}
+        <div className="sticky top-4 z-40 rounded-2xl border border-[var(--dashboard-border)] bg-[var(--dashboard-header-bg)] shadow-[var(--dashboard-shadow)] transition-colors duration-300">
+          <div className="px-4 sm:px-6 py-3">
+            <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-4">
+              <div className="justify-self-start flex items-center gap-3">
+                <BrandLogo />
+             
+              </div>
+              <nav className="hidden md:flex gap-3 text-sm items-center justify-self-center">
+                <a
+                  href="#"
+                  className="px-6 py-2 rounded-md bg-[linear-gradient(180deg,#ba0b0b_0%,#8f0707_100%)] text-white shadow-[0_0_20px_rgba(185,11,11,0.35)]"
+                >
+                  Campaigns
+                </a>
+                <a href="#" className="px-3 py-2 text-[var(--dashboard-text-secondary)] hover:text-[var(--dashboard-text)] transition-colors">Performance</a>
+                <a href="#" className="px-3 py-2 text-[var(--dashboard-text-secondary)] hover:text-[var(--dashboard-text)] transition-colors">Earnings</a>
+                <a href="#" className="px-3 py-2 text-[var(--dashboard-text-secondary)] hover:text-[var(--dashboard-text)] transition-colors">Accounts</a>
+              </nav>
+              <div className="justify-self-end flex items-center gap-2">
+                {/* Theme Toggle Button */}
+                <button
+                  onClick={toggleTheme}
+                  className="w-9 h-9 rounded-lg border border-[var(--dashboard-border-light)] bg-[var(--dashboard-button-bg)] flex items-center justify-center hover:opacity-80 transition-all"
+                  aria-label={isDarkMode ? 'Switch to light mode' : 'Switch to dark mode'}
+                >
+                  {isDarkMode ? (
+                    <Sun className="w-4 h-4 text-yellow-400" />
+                  ) : (
+                    <Moon className="w-4 h-4 text-slate-700" />
+                  )}
                 </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-48 bg-background border-2 border-border shadow-xl">
-                <ThemeToggle />
-                <DropdownMenuSeparator />
-                <DropdownMenuItem disabled>
-                  <User className="w-4 h-4 mr-2" />
-                  Profile
-                </DropdownMenuItem>
-                <DropdownMenuItem disabled>
-                  <Settings className="w-4 h-4 mr-2" />
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={signOut} className="text-destructive">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Sign Out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <button className="flex items-center gap-2 rounded-lg border border-[var(--dashboard-border-light)] bg-[var(--dashboard-button-bg)] px-3 py-1.5 hover:opacity-90 transition-opacity">
+                    <div className="w-6 h-6 rounded-full bg-[#a90b0b] flex items-center justify-center">
+                      {user?.avatar ? (
+                        <img src={user.avatar} alt="" className="w-6 h-6 rounded-full" />
+                      ) : (
+                        <span className="text-[10px] text-white font-bold">
+                          {user?.name?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase() || 'U'}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-xs sm:text-sm text-[var(--dashboard-text)]">
+                      {user?.name || user?.email?.split('@')[0] || 'User'}
+                    </span>
+                  </button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent 
+                  align="end" 
+                  className={`w-48 shadow-lg ${
+                    isDarkMode 
+                      ? 'bg-[#0d0f13] border-[#2e3238] text-white' 
+                      : 'bg-white border-gray-200 text-gray-900'
+                  }`}
+                >
+                  <DropdownMenuItem disabled className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                    <User className="w-4 h-4 mr-2" />
+                    Profile
+                  </DropdownMenuItem>
+                  <DropdownMenuItem disabled className={isDarkMode ? 'text-gray-400' : 'text-gray-500'}>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Settings
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator className={isDarkMode ? 'bg-[#2e3238]' : 'bg-gray-200'} />
+                  <DropdownMenuItem 
+                    onClick={signOut} 
+                    className={`text-red-500 cursor-pointer ${isDarkMode ? 'hover:bg-red-500/10' : 'hover:bg-red-50'}`}
+                  >
+                    <LogOut className="w-4 h-4 mr-2" />
+                    Sign Out
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-6 py-8">
+        {/* Main Content */}
+        <div className="max-w-[1100px] mx-auto px-2 sm:px-0 py-8 sm:py-10">
         {/* Search and Filters */}
-        <section aria-label="Search and filters" className="flex flex-col gap-4 mb-8">
-          <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
-            <div className="flex-1">
-              <CampaignSearch value={query} onChange={setQuery} />
+          <section aria-label="Search and filters" className="flex flex-col gap-4 mb-8">
+            <div className="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+              <div className="flex-1">
+                <CampaignSearch value={query} onChange={setQuery} />
+              </div>
+              <CampaignFilters
+                niche={niche}
+                onNicheChange={(nextNiche) => {
+                  setNiche(nextNiche);
+                  setPage(1);
+                }}
+                sort={sort}
+                onSortChange={(nextSort) => {
+                  setSort(nextSort);
+                  setDateFilter('all');
+                  setPopularityFilter('all');
+                  setBudgetFilter('all');
+                  setPage(1);
+                }}
+                pageSize={pageSize}
+                onPageSizeChange={(newSize) => {
+                  setPageSize(newSize);
+                  setPage(1);
+                }}
+                dateFilter={dateFilter}
+                onDateFilterChange={setDateFilter}
+                popularityFilter={popularityFilter}
+                onPopularityFilterChange={setPopularityFilter}
+                budgetFilter={budgetFilter}
+                onBudgetFilterChange={setBudgetFilter}
+              />
             </div>
-            <CampaignFilters 
-              niche={niche} 
-              onNicheChange={setNiche} 
-              sort={sort} 
-              onSortChange={setSort}
-              pageSize={pageSize}
-              onPageSizeChange={(newSize) => {
-                setPageSize(newSize);
-                setPage(1);
-              }}
-              dateFilter={dateFilter}
-              onDateFilterChange={setDateFilter}
-              popularityFilter={popularityFilter}
-              onPopularityFilterChange={setPopularityFilter}
-              budgetFilter={budgetFilter}
-              onBudgetFilterChange={setBudgetFilter}
-            />
-          </div>
-        </section>
+          </section>
 
-        {/* Campaign Grid */}
-        <section aria-label="Campaign results">
-          <CampaignGrid 
-            campaigns={campaigns} 
-            isLoading={isLoading}
-          />
-        </section>
+          {/* Campaign Grid */}
+          <section aria-label="Campaign results">
+            <CampaignGrid campaigns={campaigns} isLoading={isLoading} />
+          </section>
 
-        {/* Pagination */}
-        {totalPages > 1 && (
-          <nav aria-label="Campaign pagination" className="flex justify-center items-center gap-2 mt-8">
-            <Button
-              onClick={() => setPage(page - 1)}
-              disabled={page === 1}
-              variant="outline"
-              size="sm"
-              className="focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              Previous
-            </Button>
-            
-            <div className="flex gap-1">
-              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
-                <button
-                  key={pageNum}
-                  onClick={() => setPage(pageNum)}
-                  className={`w-8 h-8 rounded text-sm font-medium transition-colors focus:ring-2 focus:ring-primary focus:ring-offset-2 ${
-                    page === pageNum
-                      ? 'bg-primary text-primary-foreground'
-                      : 'border border-border bg-background hover:bg-accent hover:text-accent-foreground'
-                  }`}
-                  aria-label={`Go to page ${pageNum}`}
-                  aria-current={page === pageNum ? 'page' : undefined}
-                >
-                  {pageNum}
-                </button>
-              ))}
-            </div>
-            
-            <Button
-              onClick={() => setPage(page + 1)}
-              disabled={page === totalPages}
-              variant="outline"
-              size="sm"
-              className="focus:ring-2 focus:ring-primary focus:ring-offset-2"
-            >
-              Next
-            </Button>
-          </nav>
-        )}
-      </main>
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <nav aria-label="Campaign pagination" className="flex justify-center items-center gap-2 mt-8">
+              <Button
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+                variant="outline"
+                size="sm"
+                className="border-[var(--dashboard-border-light)] bg-[var(--dashboard-button-bg)] text-[var(--dashboard-text)] hover:opacity-80 transition-colors"
+              >
+                Previous
+              </Button>
+
+              <div className="flex gap-1">
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    onClick={() => setPage(pageNum)}
+                    className={`w-8 h-8 rounded text-sm font-medium transition-colors ${
+                      page === pageNum
+                        ? 'bg-[#a30808] text-white'
+                        : 'border border-[var(--dashboard-border-light)] bg-[var(--dashboard-button-bg)] text-[var(--dashboard-text-secondary)] hover:opacity-80'
+                    }`}
+                    aria-label={`Go to page ${pageNum}`}
+                    aria-current={page === pageNum ? 'page' : undefined}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+              </div>
+
+              <Button
+                onClick={() => setPage(page + 1)}
+                disabled={page === totalPages}
+                variant="outline"
+                size="sm"
+                className="border-[var(--dashboard-border-light)] bg-[var(--dashboard-button-bg)] text-[var(--dashboard-text)] hover:opacity-80 transition-colors"
+              >
+                Next
+              </Button>
+            </nav>
+          )}
+        </div>
+      </div>
     </main>
   );
 }

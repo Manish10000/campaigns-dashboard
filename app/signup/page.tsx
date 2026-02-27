@@ -7,6 +7,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/hooks/use-auth';
 import { Loader2 } from 'lucide-react';
+import { BrandLogo } from '@/components/brand-logo';
+import { FireParticles } from '@/components/fire-particles';
 
 export default function SignupPage() {
   const [name, setName] = useState('');
@@ -53,9 +55,13 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background flex">
+    <div className="theme-locked-dark relative min-h-screen flex overflow-hidden">
+      {/* Background layer */}
+      <div className="absolute inset-0 bg-background" />
+      {/* Fire particles layer */}
+      <FireParticles />
       {/* Left Side - Decorative */}
-      <div className="hidden lg:flex flex-1 bg-muted items-center justify-center p-12">
+      <div className="relative z-10 hidden lg:flex flex-1 bg-muted items-center justify-center p-12">
         <div className="max-w-md text-center">
           <h2 className="text-3xl font-bold text-foreground mb-4">
             Join the creator community
@@ -67,14 +73,11 @@ export default function SignupPage() {
       </div>
 
       {/* Right Side - Form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12">
+      <div className="relative z-10 flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-sm">
           <div className="mb-8">
             <Link href="/" className="flex items-center gap-2 mb-8">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-bold text-sm">S</span>
-              </div>
-              <span className="text-xl font-bold text-foreground">SEEDRAIL</span>
+              <BrandLogo />
             </Link>
             <h1 className="text-2xl font-bold text-foreground mb-2">Create an account</h1>
             <p className="text-muted-foreground">Get started with your free account</p>

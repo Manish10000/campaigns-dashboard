@@ -32,14 +32,22 @@ export function ThemeToggle() {
 
   const isDark = theme === 'dark';
 
+  const toggleTheme = () => {
+    const newTheme = isDark ? 'light' : 'dark';
+    setTheme(newTheme);
+    // Manually toggle the class to ensure it applies immediately
+    if (newTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  };
+
   return (
     <Button
       variant="ghost"
       size="sm"
-      onClick={() => {
-        console.log('Switching theme from', theme, 'to', isDark ? 'light' : 'dark');
-        setTheme(isDark ? 'light' : 'dark');
-      }}
+      onClick={toggleTheme}
       className="w-full justify-start transition-all duration-300 hover:bg-accent/50"
     >
       <div className="relative w-4 h-4 mr-2">

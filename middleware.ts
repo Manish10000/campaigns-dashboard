@@ -33,6 +33,7 @@ export async function middleware(request: NextRequest) {
   const isAuthRoute = AUTH_ROUTES.some(route => 
     pathname.startsWith(route)
   );
+  const isHomeRoute = pathname === '/';
   
   // Redirect unauthenticated users away from protected routes
   if (isProtectedRoute && !isAuthenticated) {
@@ -43,6 +44,11 @@ export async function middleware(request: NextRequest) {
   
   // Redirect authenticated users away from auth routes
   if (isAuthRoute && isAuthenticated) {
+    return NextResponse.redirect(new URL('/dashboard', request.url));
+  }
+
+  // Redirect authenticated users away from landing page
+  if (isHomeRoute && isAuthenticated) {
     return NextResponse.redirect(new URL('/dashboard', request.url));
   }
   

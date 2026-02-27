@@ -3,12 +3,13 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { ThemeProvider } from '@/components/theme-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 const _geist = Geist({ subsets: ["latin"] });
 const _geistMono = Geist_Mono({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'SeedRail - Campaign Dashboard',
+  title: 'FORKOFF - Campaign Dashboard',
   description: 'Browse, filter, and participate in campaigns. Discover opportunities that align with your interests across investing, crypto, web3, and more.',
   generator: 'v0.app',
   icons: {
@@ -39,27 +40,18 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body 
         className="font-sans antialiased"
-        style={{
-          backgroundColor: 'hsl(var(--background))',
-          color: 'hsl(var(--foreground))'
-        }}
       >
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
-          enableSystem
+          enableSystem={false}
           disableTransitionOnChange
         >
           {children}
+          <Toaster position="top-right" richColors />
           <Analytics />
         </ThemeProvider>
       </body>
     </html>
   )
-}
-
-// Debug: Check if theme is working
-if (typeof window !== 'undefined') {
-  console.log('Theme debug - Document classes:', document.documentElement.className);
-  console.log('Theme debug - Body styles:', getComputedStyle(document.body).backgroundColor);
 }

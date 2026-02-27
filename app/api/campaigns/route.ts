@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
         sorted.sort((a, b) => {
           const dateA = new Date(a.publishedDate).getTime();
           const dateB = new Date(b.publishedDate).getTime();
-          return dateFilter === 'increasing' ? dateA - dateB : dateB - dateA;
+          return dateFilter === 'increasing' ? dateB - dateA : dateA - dateB;
         });
       } else if (popularityFilter && popularityFilter !== 'all') {
         sorted.sort((a, b) => {
